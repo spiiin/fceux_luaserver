@@ -145,7 +145,7 @@ methodsNoArgs = {
   ["emu.addgamegenie"] = emu.addgamegenie,
   ["emu.delgamegenie"] = emu.delgamegenie,
   ["emu.print"] = emu.print,
-  ["emu.getscreenpixel"] = emu.getscreenpixel,
+  --["emu.getscreenpixel"] = emu.getscreenpixel, --add this manually
   
   ["rom.readbyte"] = rom.readbyte,
   ["rom.readbytesigned"] = rom.readbytesigned,
@@ -213,13 +213,23 @@ methodsNoArgs = {
 
 --for avoiding copypaste, really we can call methods by loadstring(methodName), by it's slower
 for methodName, method in pairs(methodsNoArgs) do
-    commandTable[methodName] = function (currentCmd)
+    commandTable[methodName] = function(currentCmd)
         --print("cmd:", currentCmd)
         table.remove(currentCmd, 1) -- now currentCmd is argument list
         local result = method(unpack(currentCmd))
         --print("result:", result)
         sendToHost({methodName.."_finished", result})
     end
+end
+
+--special case for method that return several values
+--emu.getscreenpixel
+commandTable["emu.getscreenpixel"] = function(currentCmd)
+    --print("cmd:", currentCmd)
+    table.remove(currentCmd, 1) -- now currentCmd is argument list
+    local r,g,b,pal = emu.getscreenpixel(unpack(currentCmd))
+    --print("result:", {r,g,b,pal})
+    sendToHost({"emu.getscreenpixel".."_finished", {r,g,b,pal}})
 end
 
 commandsQueue = {}
