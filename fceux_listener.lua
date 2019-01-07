@@ -206,7 +206,7 @@ methodsNoArgs = {
   ["movie.readonly"] = movie.readonly,
   ["movie.setreadonly"] = movie.setreadonly,
   ["movie.recording"] = movie.recording,
-  ["movie.plaing"] = movie.ispoweron,
+  ["movie.playing"] = movie.ispoweron,
   ["movie.isfromsavestate"] = movie.isfromsavestate,
   
 }

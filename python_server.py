@@ -357,8 +357,8 @@ class movie:
         return syncCall.call("movie.recording")
       
     @classmethod
-    def plaing(cls):
-        return syncCall.call("movie.plaing")
+    def playing(cls):
+        return syncCall.call("movie.playing")
         
     @classmethod
     def isfromsavestate(cls):
