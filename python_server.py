@@ -214,9 +214,9 @@ class memory:
     def writebyte(cls, addr, val):
         return syncCall.call("memory.writebyte", addr, val)
         
-    #@classmethod
-    #def readbyterange(cls, addr, size):
-    #    return syncCall.call("memory.readbyterange", addr, size)
+    @classmethod
+    def readbyterange(cls, addr, size):
+        return syncCall.call("memory.readbyterange", addr, size)
     
     @classmethod
     def getregister(cls, name):

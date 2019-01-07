@@ -155,7 +155,7 @@ methodsNoArgs = {
   ["memory.readbytesigned"] = memory.readbytesigned,
   ["memory.readword"] = memory.readword,
   ["memory.readwordsigned"] = memory.readwordsigned,
-  ["memory.readbyterange"] = memory.readbyterange,
+  --["memory.readbyterange"] = memory.readbyterange, --need to encode string to byte values
   ["memory.writebyte"] = memory.writebyte,
   ["memory.registerexecute"] = memory_registerexecute,
   ["memory.registerwrite"] = memory_registerwrite,
@@ -230,6 +230,19 @@ commandTable["emu.getscreenpixel"] = function(currentCmd)
     local r,g,b,pal = emu.getscreenpixel(unpack(currentCmd))
     --print("result:", {r,g,b,pal})
     sendToHost({"emu.getscreenpixel".."_finished", {r,g,b,pal}})
+end
+
+--special case for method that return string, need to reencoding it to array, as json can't encode string with non ascii characters
+--memory.readbyterange
+commandTable["memory.readbyterange"] = function(currentCmd)
+    --print("cmd:", currentCmd)
+    table.remove(currentCmd, 1) -- now currentCmd is argument list
+    local str = memory.readbyterange(unpack(currentCmd))
+    arrayWithData = {}
+    --reencoode string to table
+    str:gsub(".",function(c) table.insert(arrayWithData, string.byte(c)) end)
+    --print("result:", arrayWithData)
+    sendToHost({"memory.readbyterange".."_finished", arrayWithData})
 end
 
 commandsQueue = {}
